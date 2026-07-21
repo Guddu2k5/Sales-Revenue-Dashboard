@@ -1,220 +1,250 @@
 console.log("Dashboard Loaded 🚀");
 
 // ==========================
-// Sample Dashboard Data
+// Chart Variables
+// ==========================
+
+let revenueChart;
+let salesChart;
+let categoryChart;
+let regionChart;
+
+// ==========================
+// Load CSV
 // ==========================
 
 Papa.parse("data/sales.csv", {
-
     download: true,
-
     header: true,
 
     complete: function (results) {
 
-        console.log(results.data);
+        const data = results.data.filter(row => row.OrderID);
+
+        console.log(data);
+
+        // ==========================
+        // KPI Calculations
+        // ==========================
+
+        const totalRevenue = data.reduce(
+            (sum, row) => sum + Number(row.Revenue),
+            0
+        );
+
+        const totalSales = data.reduce(
+            (sum, row) => sum + Number(row.Quantity),
+            0
+        );
+
+        const totalOrders = data.length;
+
+        const averageOrder =
+            totalOrders > 0
+                ? Math.round(totalRevenue / totalOrders)
+                : 0;
+
+        document.getElementById("revenue").textContent =
+            "₹" + totalRevenue.toLocaleString("en-IN");
+
+        document.getElementById("sales").textContent =
+            totalSales;
+
+        document.getElementById("orders").textContent =
+            totalOrders;
+
+        document.getElementById("avgOrder").textContent =
+            "₹" + averageOrder.toLocaleString("en-IN");
+
+        // ==========================
+        // Revenue By Month
+        // ==========================
+
+        const monthlyRevenue = {};
+
+        data.forEach(row => {
+
+            monthlyRevenue[row.Month] =
+                (monthlyRevenue[row.Month] || 0)
+                + Number(row.Revenue);
+
+        });
+
+        // ==========================
+        // Product Sales
+        // ==========================
+
+        const productSales = {};
+
+        data.forEach(row => {
+
+            productSales[row.Product] =
+                (productSales[row.Product] || 0)
+                + Number(row.Quantity);
+
+        });
+
+        // ==========================
+        // Category Count
+        // ==========================
+
+        const categoryCount = {};
+
+        data.forEach(row => {
+
+            categoryCount[row.Category] =
+                (categoryCount[row.Category] || 0)
+                + 1;
+
+        });
+
+        // ==========================
+        // Region Revenue
+        // ==========================
+
+        const regionRevenue = {};
+
+        data.forEach(row => {
+
+            regionRevenue[row.Region] =
+                (regionRevenue[row.Region] || 0)
+                + Number(row.Revenue);
+
+        });
+
+        // ==========================
+        // Revenue Line Chart
+        // ==========================
+
+        revenueChart = new Chart(
+            document.getElementById("revenueChart"),
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: Object.keys(monthlyRevenue),
+
+                    datasets: [
+
+                        {
+
+                            label: "Revenue",
+
+                            data: Object.values(monthlyRevenue),
+
+                            borderWidth: 3,
+
+                            tension: 0.4,
+
+                            fill: true
+
+                        }
+
+                    ]
+
+                }
+
+            }
+        );
+
+        // ==========================
+        // Sales Bar Chart
+        // ==========================
+
+        salesChart = new Chart(
+            document.getElementById("salesChart"),
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels: Object.keys(productSales),
+
+                    datasets: [
+
+                        {
+
+                            label: "Units Sold",
+
+                            data: Object.values(productSales)
+
+                        }
+
+                    ]
+
+                }
+
+            }
+        );
+
+        // ==========================
+        // Category Pie Chart
+        // ==========================
+
+        categoryChart = new Chart(
+            document.getElementById("categoryChart"),
+            {
+
+                type: "pie",
+
+                data: {
+
+                    labels: Object.keys(categoryCount),
+
+                    datasets: [
+
+                        {
+
+                            data: Object.values(categoryCount)
+
+                        }
+
+                    ]
+
+                }
+
+            }
+        );
+
+        // ==========================
+        // Region Doughnut Chart
+        // ==========================
+
+        regionChart = new Chart(
+            document.getElementById("regionChart"),
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: Object.keys(regionRevenue),
+
+                    datasets: [
+
+                        {
+
+                            data: Object.values(regionRevenue)
+
+                        }
+
+                    ]
+
+                }
+
+            }
+        );
 
     }
 
 });
 
-const dashboardData = {
-
-    revenue: 845000,
-
-    sales: 327,
-
-    orders: 214,
-
-    avgOrder: 3948,
-
-    monthlyRevenue: [
-        65000,
-        72000,
-        81000,
-        93000,
-        87000,
-        110000,
-        125000
-    ],
-
-    products: [
-        95,
-        76,
-        61,
-        53,
-        41
-    ],
-
-    categorySales: [
-        45,
-        25,
-        18,
-        12
-    ],
-
-    regionRevenue: [
-        35,
-        28,
-        22,
-        15
-    ]
-
-};
-
 // ==========================
-// Update KPI Cards
-// ==========================
-
-document.getElementById("revenue").innerText =
-    "₹" + dashboardData.revenue.toLocaleString();
-
-document.getElementById("sales").innerText =
-    dashboardData.sales;
-
-document.getElementById("orders").innerText =
-    dashboardData.orders;
-
-document.getElementById("avgOrder").innerText =
-    "₹" + dashboardData.avgOrder.toLocaleString();
-
-
-// ==========================
-// Revenue Line Chart
-// ==========================
-
-new Chart(
-    document.getElementById("revenueChart"),
-    {
-
-        type: "line",
-
-        data: {
-
-            labels: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul"
-            ],
-
-            datasets: [{
-
-                label: "Revenue",
-
-                data: dashboardData.monthlyRevenue,
-
-                borderWidth: 3,
-
-                tension: .4,
-
-                fill: true
-
-            }]
-
-        }
-
-    });
-
-
-// ==========================
-// Sales Bar Chart
-// ==========================
-
-new Chart(
-    document.getElementById("salesChart"),
-    {
-
-        type: "bar",
-
-        data: {
-
-            labels: [
-                "Laptop",
-                "Phone",
-                "Monitor",
-                "Keyboard",
-                "Mouse"
-            ],
-
-            datasets: [{
-
-                label: "Units Sold",
-
-                data: dashboardData.products
-
-            }]
-
-        }
-
-    });
-
-
-// ==========================
-// Category Pie Chart
-// ==========================
-
-new Chart(
-    document.getElementById("categoryChart"),
-    {
-
-        type: "pie",
-
-        data: {
-
-            labels: [
-                "Electronics",
-                "Accessories",
-                "Furniture",
-                "Others"
-            ],
-
-            datasets: [{
-
-                data: dashboardData.categorySales
-
-            }]
-
-        }
-
-    });
-
-
-// ==========================
-// Region Doughnut Chart
-// ==========================
-
-new Chart(
-    document.getElementById("regionChart"),
-    {
-
-        type: "doughnut",
-
-        data: {
-
-            labels: [
-                "North",
-                "South",
-                "East",
-                "West"
-            ],
-
-            datasets: [{
-
-                data: dashboardData.regionRevenue
-
-            }]
-
-        }
-
-    });
-
-
-// ==========================
-// Table Data
+// Sample Table Data
+// (Will become CSV-driven in Sprint 7.3)
 // ==========================
 
 const orders = [
@@ -271,37 +301,25 @@ const orders = [
 
 ];
 
-const tableBody =
-    document.getElementById("tableBody");
+const tableBody = document.getElementById("tableBody");
 
 tableBody.innerHTML = "";
 
 orders.forEach(order => {
 
     tableBody.innerHTML += `
-
-<tr>
-
-<td>${order.id}</td>
-
-<td>${order.customer}</td>
-
-<td>${order.product}</td>
-
-<td>${order.category}</td>
-
-<td>${order.region}</td>
-
-<td>${order.amount}</td>
-
-<td>${order.status}</td>
-
-</tr>
-
-`;
+        <tr>
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.product}</td>
+            <td>${order.category}</td>
+            <td>${order.region}</td>
+            <td>${order.amount}</td>
+            <td>${order.status}</td>
+        </tr>
+    `;
 
 });
-
 
 // ==========================
 // Theme Button
