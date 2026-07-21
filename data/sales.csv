@@ -1,0 +1,13 @@
+OrderID,Customer,Product,Category,Region,Month,Quantity,Revenue
+1001,Rahul Sharma,Laptop,Electronics,North,January,2,65000
+1002,Ananya Roy,Phone,Electronics,East,January,3,28000
+1003,Rohan Singh,Monitor,Electronics,South,February,1,18500
+1004,Priya Das,Keyboard,Accessories,West,February,5,2500
+1005,Neha Verma,Mouse,Accessories,North,March,6,1800
+1006,Arjun Gupta,Tablet,Electronics,East,March,2,42000
+1007,Sneha Patel,Printer,Office,West,April,1,15000
+1008,Amit Kumar,Chair,Furniture,South,April,4,12000
+1009,Riya Sen,Desk,Furniture,North,May,2,18000
+1010,Deepak Roy,Headphones,Accessories,East,May,3,4500
+1011,Sonia Das,Laptop,Electronics,North,June,2,70000
+1012,Akash Singh,Phone,Electronics,West,June,4,32000

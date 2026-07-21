@@ -4,6 +4,20 @@ console.log("Dashboard Loaded 🚀");
 // Sample Dashboard Data
 // ==========================
 
+Papa.parse("data/sales.csv", {
+
+    download: true,
+
+    header: true,
+
+    complete: function (results) {
+
+        console.log(results.data);
+
+    }
+
+});
+
 const dashboardData = {
 
     revenue: 845000,
@@ -53,16 +67,16 @@ const dashboardData = {
 // ==========================
 
 document.getElementById("revenue").innerText =
-"₹" + dashboardData.revenue.toLocaleString();
+    "₹" + dashboardData.revenue.toLocaleString();
 
 document.getElementById("sales").innerText =
-dashboardData.sales;
+    dashboardData.sales;
 
 document.getElementById("orders").innerText =
-dashboardData.orders;
+    dashboardData.orders;
 
 document.getElementById("avgOrder").innerText =
-"₹" + dashboardData.avgOrder.toLocaleString();
+    "₹" + dashboardData.avgOrder.toLocaleString();
 
 
 // ==========================
@@ -70,40 +84,40 @@ document.getElementById("avgOrder").innerText =
 // ==========================
 
 new Chart(
-document.getElementById("revenueChart"),
-{
+    document.getElementById("revenueChart"),
+    {
 
-type:"line",
+        type: "line",
 
-data:{
+        data: {
 
-labels:[
-"Jan",
-"Feb",
-"Mar",
-"Apr",
-"May",
-"Jun",
-"Jul"
-],
+            labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul"
+            ],
 
-datasets:[{
+            datasets: [{
 
-label:"Revenue",
+                label: "Revenue",
 
-data:dashboardData.monthlyRevenue,
+                data: dashboardData.monthlyRevenue,
 
-borderWidth:3,
+                borderWidth: 3,
 
-tension:.4,
+                tension: .4,
 
-fill:true
+                fill: true
 
-}]
+            }]
 
-}
+        }
 
-});
+    });
 
 
 // ==========================
@@ -111,32 +125,32 @@ fill:true
 // ==========================
 
 new Chart(
-document.getElementById("salesChart"),
-{
+    document.getElementById("salesChart"),
+    {
 
-type:"bar",
+        type: "bar",
 
-data:{
+        data: {
 
-labels:[
-"Laptop",
-"Phone",
-"Monitor",
-"Keyboard",
-"Mouse"
-],
+            labels: [
+                "Laptop",
+                "Phone",
+                "Monitor",
+                "Keyboard",
+                "Mouse"
+            ],
 
-datasets:[{
+            datasets: [{
 
-label:"Units Sold",
+                label: "Units Sold",
 
-data:dashboardData.products
+                data: dashboardData.products
 
-}]
+            }]
 
-}
+        }
 
-});
+    });
 
 
 // ==========================
@@ -144,29 +158,29 @@ data:dashboardData.products
 // ==========================
 
 new Chart(
-document.getElementById("categoryChart"),
-{
+    document.getElementById("categoryChart"),
+    {
 
-type:"pie",
+        type: "pie",
 
-data:{
+        data: {
 
-labels:[
-"Electronics",
-"Accessories",
-"Furniture",
-"Others"
-],
+            labels: [
+                "Electronics",
+                "Accessories",
+                "Furniture",
+                "Others"
+            ],
 
-datasets:[{
+            datasets: [{
 
-data:dashboardData.categorySales
+                data: dashboardData.categorySales
 
-}]
+            }]
 
-}
+        }
 
-});
+    });
 
 
 // ==========================
@@ -174,29 +188,29 @@ data:dashboardData.categorySales
 // ==========================
 
 new Chart(
-document.getElementById("regionChart"),
-{
+    document.getElementById("regionChart"),
+    {
 
-type:"doughnut",
+        type: "doughnut",
 
-data:{
+        data: {
 
-labels:[
-"North",
-"South",
-"East",
-"West"
-],
+            labels: [
+                "North",
+                "South",
+                "East",
+                "West"
+            ],
 
-datasets:[{
+            datasets: [{
 
-data:dashboardData.regionRevenue
+                data: dashboardData.regionRevenue
 
-}]
+            }]
 
-}
+        }
 
-});
+    });
 
 
 // ==========================
@@ -205,66 +219,66 @@ data:dashboardData.regionRevenue
 
 const orders = [
 
-{
-id:1001,
-customer:"Rahul Sharma",
-product:"Laptop",
-category:"Electronics",
-region:"North",
-amount:"₹65,000",
-status:"Delivered"
-},
+    {
+        id: 1001,
+        customer: "Rahul Sharma",
+        product: "Laptop",
+        category: "Electronics",
+        region: "North",
+        amount: "₹65,000",
+        status: "Delivered"
+    },
 
-{
-id:1002,
-customer:"Ananya Roy",
-product:"Smartphone",
-category:"Electronics",
-region:"East",
-amount:"₹28,000",
-status:"Shipped"
-},
+    {
+        id: 1002,
+        customer: "Ananya Roy",
+        product: "Smartphone",
+        category: "Electronics",
+        region: "East",
+        amount: "₹28,000",
+        status: "Shipped"
+    },
 
-{
-id:1003,
-customer:"Rohan Singh",
-product:"Monitor",
-category:"Electronics",
-region:"South",
-amount:"₹18,500",
-status:"Pending"
-},
+    {
+        id: 1003,
+        customer: "Rohan Singh",
+        product: "Monitor",
+        category: "Electronics",
+        region: "South",
+        amount: "₹18,500",
+        status: "Pending"
+    },
 
-{
-id:1004,
-customer:"Priya Das",
-product:"Keyboard",
-category:"Accessories",
-region:"West",
-amount:"₹2,500",
-status:"Delivered"
-},
+    {
+        id: 1004,
+        customer: "Priya Das",
+        product: "Keyboard",
+        category: "Accessories",
+        region: "West",
+        amount: "₹2,500",
+        status: "Delivered"
+    },
 
-{
-id:1005,
-customer:"Neha Verma",
-product:"Mouse",
-category:"Accessories",
-region:"North",
-amount:"₹1,800",
-status:"Delivered"
-}
+    {
+        id: 1005,
+        customer: "Neha Verma",
+        product: "Mouse",
+        category: "Accessories",
+        region: "North",
+        amount: "₹1,800",
+        status: "Delivered"
+    }
 
 ];
 
 const tableBody =
-document.getElementById("tableBody");
+    document.getElementById("tableBody");
 
-tableBody.innerHTML="";
+tableBody.innerHTML = "";
 
-orders.forEach(order=>{
+orders.forEach(order => {
 
-tableBody.innerHTML += `
+    tableBody.innerHTML += `
 
 <tr>
 
@@ -294,9 +308,9 @@ tableBody.innerHTML += `
 // ==========================
 
 document
-.getElementById("themeBtn")
-.addEventListener("click",()=>{
+    .getElementById("themeBtn")
+    .addEventListener("click", () => {
 
-alert("Dark Mode Coming Soon 😎");
+        alert("Dark Mode Coming Soon 😎");
 
-});
+    });
