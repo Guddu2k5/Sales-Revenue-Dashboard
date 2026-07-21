@@ -10,7 +10,7 @@ let categoryChart;
 let regionChart;
 
 // ==========================
-// Load CSV
+// Load CSV Data
 // ==========================
 
 Papa.parse("data/sales.csv", {
@@ -24,7 +24,7 @@ Papa.parse("data/sales.csv", {
         console.log(data);
 
         // ==========================
-        // KPI Calculations
+        // KPI Cards
         // ==========================
 
         const totalRevenue = data.reduce(
@@ -39,10 +39,9 @@ Papa.parse("data/sales.csv", {
 
         const totalOrders = data.length;
 
-        const averageOrder =
-            totalOrders > 0
-                ? Math.round(totalRevenue / totalOrders)
-                : 0;
+        const averageOrder = totalOrders
+            ? Math.round(totalRevenue / totalOrders)
+            : 0;
 
         document.getElementById("revenue").textContent =
             "₹" + totalRevenue.toLocaleString("en-IN");
@@ -65,8 +64,8 @@ Papa.parse("data/sales.csv", {
         data.forEach(row => {
 
             monthlyRevenue[row.Month] =
-                (monthlyRevenue[row.Month] || 0)
-                + Number(row.Revenue);
+                (monthlyRevenue[row.Month] || 0) +
+                Number(row.Revenue);
 
         });
 
@@ -79,8 +78,8 @@ Papa.parse("data/sales.csv", {
         data.forEach(row => {
 
             productSales[row.Product] =
-                (productSales[row.Product] || 0)
-                + Number(row.Quantity);
+                (productSales[row.Product] || 0) +
+                Number(row.Quantity);
 
         });
 
@@ -93,8 +92,7 @@ Papa.parse("data/sales.csv", {
         data.forEach(row => {
 
             categoryCount[row.Category] =
-                (categoryCount[row.Category] || 0)
-                + 1;
+                (categoryCount[row.Category] || 0) + 1;
 
         });
 
@@ -107,10 +105,19 @@ Papa.parse("data/sales.csv", {
         data.forEach(row => {
 
             regionRevenue[row.Region] =
-                (regionRevenue[row.Region] || 0)
-                + Number(row.Revenue);
+                (regionRevenue[row.Region] || 0) +
+                Number(row.Revenue);
 
         });
+
+        // ==========================
+        // Destroy Existing Charts
+        // ==========================
+
+        if (revenueChart) revenueChart.destroy();
+        if (salesChart) salesChart.destroy();
+        if (categoryChart) categoryChart.destroy();
+        if (regionChart) regionChart.destroy();
 
         // ==========================
         // Revenue Line Chart
@@ -119,64 +126,35 @@ Papa.parse("data/sales.csv", {
         revenueChart = new Chart(
             document.getElementById("revenueChart"),
             {
-
                 type: "line",
-
                 data: {
-
                     labels: Object.keys(monthlyRevenue),
-
-                    datasets: [
-
-                        {
-
-                            label: "Revenue",
-
-                            data: Object.values(monthlyRevenue),
-
-                            borderWidth: 3,
-
-                            tension: 0.4,
-
-                            fill: true
-
-                        }
-
-                    ]
-
+                    datasets: [{
+                        label: "Revenue",
+                        data: Object.values(monthlyRevenue),
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
                 }
-
             }
         );
 
         // ==========================
-        // Sales Bar Chart
+        // Product Sales Chart
         // ==========================
 
         salesChart = new Chart(
             document.getElementById("salesChart"),
             {
-
                 type: "bar",
-
                 data: {
-
                     labels: Object.keys(productSales),
-
-                    datasets: [
-
-                        {
-
-                            label: "Units Sold",
-
-                            data: Object.values(productSales)
-
-                        }
-
-                    ]
-
+                    datasets: [{
+                        label: "Units Sold",
+                        data: Object.values(productSales)
+                    }]
                 }
-
             }
         );
 
@@ -187,25 +165,13 @@ Papa.parse("data/sales.csv", {
         categoryChart = new Chart(
             document.getElementById("categoryChart"),
             {
-
                 type: "pie",
-
                 data: {
-
                     labels: Object.keys(categoryCount),
-
-                    datasets: [
-
-                        {
-
-                            data: Object.values(categoryCount)
-
-                        }
-
-                    ]
-
+                    datasets: [{
+                        data: Object.values(categoryCount)
+                    }]
                 }
-
             }
         );
 
@@ -216,108 +182,49 @@ Papa.parse("data/sales.csv", {
         regionChart = new Chart(
             document.getElementById("regionChart"),
             {
-
                 type: "doughnut",
-
                 data: {
-
                     labels: Object.keys(regionRevenue),
-
-                    datasets: [
-
-                        {
-
-                            data: Object.values(regionRevenue)
-
-                        }
-
-                    ]
-
+                    datasets: [{
+                        data: Object.values(regionRevenue)
+                    }]
                 }
-
             }
         );
 
+        // ==========================
+        // Recent Orders Table
+        // ==========================
+
+        const tableBody = document.getElementById("tableBody");
+
+        tableBody.innerHTML = "";
+
+        data.forEach(row => {
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${row.OrderID}</td>
+                    <td>${row.Customer}</td>
+                    <td>${row.Product}</td>
+                    <td>${row.Category}</td>
+                    <td>${row.Region}</td>
+                    <td>₹${Number(row.Revenue).toLocaleString("en-IN")}</td>
+                    <td>
+                        <span class="status delivered">
+                            Delivered
+                        </span>
+                    </td>
+                </tr>
+            `;
+
+        });
+
+    },
+
+    error: function (err) {
+        console.error("Error loading CSV:", err);
     }
-
-});
-
-// ==========================
-// Sample Table Data
-// (Will become CSV-driven in Sprint 7.3)
-// ==========================
-
-const orders = [
-
-    {
-        id: 1001,
-        customer: "Rahul Sharma",
-        product: "Laptop",
-        category: "Electronics",
-        region: "North",
-        amount: "₹65,000",
-        status: "Delivered"
-    },
-
-    {
-        id: 1002,
-        customer: "Ananya Roy",
-        product: "Smartphone",
-        category: "Electronics",
-        region: "East",
-        amount: "₹28,000",
-        status: "Shipped"
-    },
-
-    {
-        id: 1003,
-        customer: "Rohan Singh",
-        product: "Monitor",
-        category: "Electronics",
-        region: "South",
-        amount: "₹18,500",
-        status: "Pending"
-    },
-
-    {
-        id: 1004,
-        customer: "Priya Das",
-        product: "Keyboard",
-        category: "Accessories",
-        region: "West",
-        amount: "₹2,500",
-        status: "Delivered"
-    },
-
-    {
-        id: 1005,
-        customer: "Neha Verma",
-        product: "Mouse",
-        category: "Accessories",
-        region: "North",
-        amount: "₹1,800",
-        status: "Delivered"
-    }
-
-];
-
-const tableBody = document.getElementById("tableBody");
-
-tableBody.innerHTML = "";
-
-orders.forEach(order => {
-
-    tableBody.innerHTML += `
-        <tr>
-            <td>${order.id}</td>
-            <td>${order.customer}</td>
-            <td>${order.product}</td>
-            <td>${order.category}</td>
-            <td>${order.region}</td>
-            <td>${order.amount}</td>
-            <td>${order.status}</td>
-        </tr>
-    `;
 
 });
 
