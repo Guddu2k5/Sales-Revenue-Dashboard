@@ -1,110 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales & Revenue Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- PapaParse -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+        <!-- ================= Sidebar ================= -->
 
-        <h2>📊 Dashboard</h2>
+        <aside class="sidebar">
 
-        <nav>
-            <ul>
-                <li class="active">🏠 Home</li>
-                <li>📈 Analytics</li>
-                <li>🛒 Sales</li>
-                <li>👥 Customers</li>
-                <li>⚙️ Settings</li>
-            </ul>
-        </nav>
+            <h2>📊 Dashboard</h2>
 
-    </aside>
+            <nav>
 
-    <!-- Main Content -->
-    <main class="main-content">
+                <ul>
 
-        <header class="topbar">
+                    <li class="active">🏠 Dashboard</li>
 
-            <h1>Sales & Revenue Dashboard</h1>
+                    <li>📈 Analytics</li>
 
-            <button id="themeBtn">🌙 Dark Mode</button>
+                    <li>🛒 Sales</li>
 
-        </header>
+                    <li>👥 Customers</li>
 
-        <!-- KPI Cards -->
-        <section class="cards">
+                    <li>📦 Products</li>
 
-            <div class="card">
-                <h3>Total Revenue</h3>
-                <p id="revenue">₹0</p>
-            </div>
+                    <li>🌍 Regions</li>
 
-            <div class="card">
-                <h3>Total Sales</h3>
-                <p id="sales">0</p>
-            </div>
+                    <li>⚙️ Settings</li>
 
-            <div class="card">
-                <h3>Total Orders</h3>
-                <p id="orders">0</p>
-            </div>
+                </ul>
 
-            <div class="card">
-                <h3>Average Order</h3>
-                <p id="avgOrder">₹0</p>
-            </div>
+            </nav>
 
-        </section>
+        </aside>
 
-        <!-- Charts -->
-        <section class="charts">
+        <!-- ================= Main Content ================= -->
 
-            <div class="chart-box">
-                <canvas id="revenueChart"></canvas>
-            </div>
+        <main class="main-content">
 
-            <div class="chart-box">
-                <canvas id="salesChart"></canvas>
-            </div>
+            <!-- Topbar -->
 
-            <div class="chart-box">
-                <canvas id="categoryChart"></canvas>
-            </div>
+            <header class="topbar">
 
-            <div class="chart-box">
-                <canvas id="regionChart"></canvas>
-            </div>
+                <div>
 
-        </section>
+                    <h1>Sales & Revenue Dashboard</h1>
 
-        <!-- Table -->
-        <section class="table-section">
+                    <p>Welcome back! Here's today's business overview.</p>
 
-            <h2>Recent Orders</h2>
+                </div>
 
-            <table>
+                <button id="themeBtn">🌙 Dark Mode</button>
 
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Product</th>
-                        <th>Region</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
+            </header>
 
-                <tbody id="tableBody">
+            <!-- KPI Cards -->
 
-                </tbody>
+            <section class="cards">
 
-            </table>
+                <div class="card">
 
-        </section>
+                    <h3>Total Revenue</h3>
 
-    </main>
+                    <p id="revenue">₹0</p>
 
-</div>
+                </div>
 
-<script src="script.js"></script>
+                <div class="card">
+
+                    <h3>Total Sales</h3>
+
+                    <p id="sales">0</p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Total Orders</h3>
+
+                    <p id="orders">0</p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Average Order Value</h3>
+
+                    <p id="avgOrder">₹0</p>
+
+                </div>
+
+            </section>
+
+            <!-- Charts -->
+
+            <section class="charts">
+
+                <div class="chart-box">
+
+                    <h3>Revenue Trend</h3>
+
+                    <canvas id="revenueChart"></canvas>
+
+                </div>
+
+                <div class="chart-box">
+
+                    <h3>Top Selling Products</h3>
+
+                    <canvas id="salesChart"></canvas>
+
+                </div>
+
+                <div class="chart-box">
+
+                    <h3>Sales by Category</h3>
+
+                    <canvas id="categoryChart"></canvas>
+
+                </div>
+
+                <div class="chart-box">
+
+                    <h3>Revenue by Region</h3>
+
+                    <canvas id="regionChart"></canvas>
+
+                </div>
+
+            </section>
+
+            <!-- Recent Orders -->
+
+            <section class="table-section">
+
+                <h2>Recent Orders</h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Order ID</th>
+
+                            <th>Customer</th>
+
+                            <th>Product</th>
+
+                            <th>Category</th>
+
+                            <th>Region</th>
+
+                            <th>Amount</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tableBody">
+
+                        <tr>
+
+                            <td>1001</td>
+
+                            <td>Rahul Sharma</td>
+
+                            <td>Laptop</td>
+
+                            <td>Electronics</td>
+
+                            <td>North</td>
+
+                            <td>₹65,000</td>
+
+                            <td>Delivered</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>1002</td>
+
+                            <td>Ananya Roy</td>
+
+                            <td>Smartphone</td>
+
+                            <td>Electronics</td>
+
+                            <td>East</td>
+
+                            <td>₹28,000</td>
+
+                            <td>Shipped</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>1003</td>
+
+                            <td>Priya Das</td>
+
+                            <td>Headphones</td>
+
+                            <td>Accessories</td>
+
+                            <td>West</td>
+
+                            <td>₹5,000</td>
+
+                            <td>Delivered</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>1004</td>
+
+                            <td>Rohan Singh</td>
+
+                            <td>Gaming Mouse</td>
+
+                            <td>Accessories</td>
+
+                            <td>South</td>
+
+                            <td>₹3,200</td>
+
+                            <td>Pending</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>1005</td>
+
+                            <td>Neha Verma</td>
+
+                            <td>Monitor</td>
+
+                            <td>Electronics</td>
+
+                            <td>North</td>
+
+                            <td>₹18,500</td>
+
+                            <td>Delivered</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="script.js"></script>
 
 </body>
+
+</html>
